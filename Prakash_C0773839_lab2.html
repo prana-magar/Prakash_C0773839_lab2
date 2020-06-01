@@ -1,0 +1,183 @@
+<html>
+	<font size="8" color="green">Final test lab</font><br><br>
+	Number of rows: <input type="text" id="t1" /><br><br>
+	Number of cols: <input type="text" id="t2" /><br><br>
+	
+	<button id="b1" onclick="generateTable()">Generate Table</button><br><br>
+	
+	<button id="b2" onclick="addColumn()">Add Column</button>
+	
+	<button id="b3" onclick="addRow()">Add Row</button>
+		
+	<script language="javascript">
+
+		var getUserInput = function(){
+			// get number of rows and columns by user
+			var numRows = document.getElementById("t1").value;
+			if(numRows == ""){
+				alert("Please Enter Number of rows to generate");
+			}
+
+			var numCols = document.getElementById("t2").value;
+			if(numRows == ""){
+				alert("Please Enter Number of cols to generate");
+			}
+			return {numRows: numRows, numCols: numCols};
+		}
+
+		var wipeOutOther = function(){
+			// // remove main header
+			// document.getElementsByTagName("font")[0].remove()
+
+			// // remove inputs labels
+			// var input1 = document.getElementById("t1");
+			// input1.previousSibling
+
+			document.getElementsByTagName("body")[0].innerHTML = "";
+		}
+
+		var generateTable = function(){
+			var values = getUserInput();
+			var numRows = values.numRows;
+			var numCols = values.numCols;
+
+
+			// clear any previous tables
+			var tables = document.getElementsByTagName('table');
+			if(tables.length != 0){
+				tables[0].remove();
+			}
+
+			// create main table tag
+			var table = document.createElement("table");
+			table.setAttribute('border', '1');
+
+			// attach to DOM
+			var body = document.getElementsByTagName("body")[0];
+			body.appendChild(table)
+
+			// start creating rows and columns inside
+			for(var rowNo = 0; rowNo<numRows; rowNo++){
+				var tr = document.createElement("tr");
+				for(var colNo=0; colNo<numCols; colNo++){
+					var td = document.createElement("td");
+
+					// create text and put inside the cell
+					var textNode = document.createTextNode("row["+rowNo+"] col["+colNo+"]");
+					td.appendChild(textNode);
+
+					// once col td is created add inside row
+					tr.appendChild(td);
+				}
+				// once row is create add inside table
+				table.appendChild(tr)
+			}
+
+			// save elements for later
+			var addRowBtn = document.getElementById("b2");
+			var addColBtn = document.getElementById("b3");
+			wipeOutOther();
+
+			// reattach saved elements
+			body.appendChild(addRowBtn);
+			body.appendChild(addColBtn);
+
+			body.appendChild(table);
+		
+		}
+		
+		
+	
+		// attach event listners to add column and add row
+
+
+		// we will go to each existing row and just attach one extra td
+		var addColumn = function(){
+			var table = document.getElementsByTagName("table")[0]
+			var rows = table.rows;
+
+			// to add the text inside the td we will need to know how many cols are already present
+			var numCols = 0;
+			if(rows.length !=0){
+				numCols = rows[0].childNodes.length;
+			}
+			else{
+				var textNode = document.createTextNode("row[0] col[0]");
+				var td = document.createElement('td')
+				td.appendChild(textNode);
+				var tr = document.createElement('tr');
+				tr.appendChild(td);
+				table.appendChild(tr);
+				return
+
+
+			}
+
+			
+			
+			
+			for(let i=0 ;i<rows.length; i++){
+
+				// add text of current row and new col number.
+				var textNode = document.createTextNode("row["+i+"] col["+numCols+"]");
+
+				// create the td
+				var td = document.createElement('td')
+
+				// inserrt the textnode
+				td.appendChild(textNode);
+
+				// insert the td into current row
+				rows[i].appendChild(td)
+
+			}
+			
+		}
+
+
+		// for creating new row will append a new tr with existing number of columns td
+		var addRow = function(){
+			var table = document.getElementsByTagName("table")[0]
+			var rows = table.rows;
+
+			// we need row no to add the value in textnode of newly created td
+			var rowNo = table.childNodes.length;
+			var numCols = 0;
+			if(rows.length !=0){
+				numCols = rows[0].childNodes.length;
+			}
+			else{
+
+				// for no row case when user enters 0 rows
+				var textNode = document.createTextNode("row[0] col[0]");
+				var td = document.createElement('td')
+				td.appendChild(textNode);
+				var tr = document.createElement('tr')
+				tr.appendChild(td);
+				table.appendChild(tr);
+         		return;
+			}
+			var tr = document.createElement('tr')
+
+			// we will create columns to add in new row to obe created
+			for(i=0; i<numCols; i++){
+
+				// add new row Number and existing col number
+				var textNode = document.createTextNode("row["+rowNo+"] col["+i+"]");
+
+				// create td
+				var td = document.createElement('td')
+
+				// iinsert the textNode
+				td.appendChild(textNode);
+
+				// insert td to tr
+				tr.appendChild(td);
+			}
+
+			// insert new row
+			table.appendChild(tr);
+		}
+	</script>
+	
+</html>
